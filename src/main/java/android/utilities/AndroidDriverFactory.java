@@ -21,7 +21,7 @@ public class AndroidDriverFactory {
 	private final static String platformVersion = "6.0";
 	private final static String deviceName = "Android Emulator";
 	
-	public static AndroidDriver androidDriver;
+	private static AndroidDriver androidDriver;
 	
 	/**
 	 * Build Android Driver to run test
