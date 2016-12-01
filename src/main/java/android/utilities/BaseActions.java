@@ -4,12 +4,16 @@
 package android.utilities;
 
 import io.appium.java_client.android.AndroidElement;
+import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.support.PageFactory;
 import ru.yandex.qatools.allure.annotations.Attachment;
+
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -17,6 +21,10 @@ import ru.yandex.qatools.allure.annotations.Attachment;
  *
  */
 public abstract class BaseActions extends AndroidDriverFactory{
+
+    public BaseActions(){
+        PageFactory.initElements(new AppiumFieldDecorator(getAndroidDriver(), 15, TimeUnit.SECONDS), this);
+    }
 
     /**
      * Find Element using BY
@@ -42,17 +50,47 @@ public abstract class BaseActions extends AndroidDriverFactory{
         return null;
     }
 
+
+    /**
+     * Tap on Element
+     * @param elementToTap
+     */
+    protected void tapOn(AndroidElement elementToTap) {
+        int attempts = 1;
+        while (attempts > 0) {
+            try {
+                elementToTap.tap(1,1);
+                break;
+            } catch (NoSuchElementException exception) {
+                if (attempts == 1) {
+                    takeScreenShot();
+                }
+            }
+            attempts--;
+            thinkTime(100);
+        }
+    }
+
     /**
      * Tap on Element
      * @param elementToTap
      */
     protected void tapOn(By elementToTap) {
-        int attempts = 1;
+        tapOn(findElement(elementToTap));
+    }
+
+    /**
+     * Set value on input field
+     * @param androidElement
+     * @param valueToSet
+     */
+    protected void setValue(AndroidElement androidElement, String valueToSet){
+        int attempts = 5;
         while (attempts > 0) {
             try {
-                    findElement(elementToTap).tap(1,1);
-                    break;
-            } catch (NoSuchElementException exception) {
+                androidElement.sendKeys(valueToSet);
+                break;
+            } catch (NoSuchElementException e) {
                 if (attempts == 1) {
                     takeScreenShot();
                 }
@@ -68,19 +106,7 @@ public abstract class BaseActions extends AndroidDriverFactory{
      * @param valueToSet
      */
     protected void setValue(By androidElement, String valueToSet){
-        int attempts = 5;
-        while (attempts > 0) {
-            try {
-                findElement(androidElement).sendKeys(valueToSet);
-                break;
-            } catch (NoSuchElementException e) {
-                if (attempts == 1) {
-                    takeScreenShot();
-                }
-            }
-            attempts--;
-            thinkTime(100);
-        }
+        setValue(findElement(androidElement), valueToSet);
     }
 
     /**
@@ -88,11 +114,11 @@ public abstract class BaseActions extends AndroidDriverFactory{
      * @param androidElement
      * @return
      */
-    protected String getValueFromElementByText(By androidElement) {
+    protected String getValueFromElementByText(AndroidElement androidElement) {
         int attempts = 2;
         while (attempts > 0) {
             try {
-                return findElement(androidElement).getText();
+                return androidElement.getText();
             } catch (NoSuchElementException e) {
                 if (attempts == 1) {
                     takeScreenShot();
@@ -104,6 +130,15 @@ public abstract class BaseActions extends AndroidDriverFactory{
             thinkTime(100);
         }
         return "";
+    }
+
+    /**
+     * Get value from an element by text
+     * @param androidElement
+     * @return
+     */
+    protected String getValueFromElementByText(By androidElement) {
+        return getValueFromElementByText(findElement(androidElement));
     }
 
     /**
@@ -119,6 +154,43 @@ public abstract class BaseActions extends AndroidDriverFactory{
             assertionError.printStackTrace();
             throw assertionError;
         }
+    }
+
+    /**
+     * Verify the boolean value is true
+     * @param isTrue
+     */
+    protected  void verifyTrue(boolean isTrue){
+        try {
+            Assert.assertTrue(isTrue);
+        } catch (AssertionError assertionError) {
+            takeScreenShot();
+            assertionError.printStackTrace();
+            throw assertionError;
+        }
+    }
+
+    /**
+     * It will return true if a specific exists in screen, otherwise false
+     * @param elementToBeFound : The element we are searching for
+     * @return if found True else False
+     */
+    protected boolean isElementExists(By elementToBeFound) {
+
+        int attempts = 2;
+        boolean isFound = false;
+        while (attempts > 0) {
+            try {
+                getAndroidDriver().findElement(elementToBeFound);
+                isFound = true;
+                break;
+            } catch (NoSuchElementException exc) {
+
+            }
+            thinkTime(1000);
+            attempts--;
+        }
+        return isFound;
     }
 
     /**

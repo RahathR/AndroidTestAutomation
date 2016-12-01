@@ -41,6 +41,11 @@ public class AndroidDriverFactory {
                 capabilities);
 	}
 
+    /**
+     * Method to get Android Driver
+     * @return android driver instance
+     * @author arafatmamun
+     */
 	public static AndroidDriver getAndroidDriver(){
         return androidDriver;
     }

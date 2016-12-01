@@ -28,9 +28,9 @@ public class SignInStepDefinitions{
 		homeScreen.acceptNotificationAlert();
 	}
 
-	@Given("^I tap on Sign in button on the home page$")
-	public void tapOnHomePageSignInButton(){
-		homeScreen.tapOnHomePageSignInButton();
+	@Given("^I tap on Sign in button from the menu")
+	public void tapOnSignInButtonFromMenu(){
+		homeScreen.tapOnSignInButtonFromMenu();
 	}
 
 	@Given("^I enter (Email|Password) as '([a-zA-Z0-9!@#$%^&*.()\\[\\]\"]+)' on the sign in screen$")

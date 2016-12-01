@@ -14,7 +14,7 @@ import cucumber.api.junit.Cucumber;
  */
 @RunWith(Cucumber.class)
 @CucumberOptions(
-		tags = {"@SignIn"},
+		tags = {"@Regression"},
 		features = {"src/test/resources/features"},
 		glue ="android/stepDefinitions"
 		)
