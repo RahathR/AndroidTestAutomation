@@ -37,7 +37,7 @@ public class AndroidDriverFactory {
         capabilities.setCapability(MobileCapabilityType.NO_RESET, false);
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, deviceName);
         capabilities.setCapability("app", getAndroidApplication().getAbsolutePath());
-        androidDriver = new AndroidDriver<>(new URL("http://0.0.0.0:4723/wd/hub"),
+        androidDriver = new AndroidDriver<>(new URL("http://0.0.0.0:9020/wd/hub"),
                 capabilities);
 	}
 
